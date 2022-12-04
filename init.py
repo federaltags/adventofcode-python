@@ -6,7 +6,7 @@
 
 # USER SPECIFIC PARAMETERS
 base_pos = "./"            # Folders will be created here. If you want to make a parent folder, change this to ex "./adventofcode/"
-USER_SESSION_ID = "53616c7465645f5ff9f40218a8407cb18e1ad2c827ab609841eeb65f0ebb61fe555cc97bec6558bcb9330d0f6346fa1e4a113235150ee8c464b4dc8540920961"       # Get your session by inspecting the session cookie content in your web browser while connected to adventofcode and paste it here as plain text in between the ". Leave at is to not download inputs.
+USER_SESSION_ID = "53616c7465645f5f05922f5a3139183d2b4c1a7736e54830eff781da2df937ff2aeacfd281c2bef7042ac1877ec84411503dcd8823135b5512914f7fd3dede3b"       # Get your session by inspecting the session cookie content in your web browser while connected to adventofcode and paste it here as plain text in between the ". Leave at is to not download inputs.
 DOWNLOAD_STATEMENTS = True # Set to false to not download statements. Note that only part one is downloaded (since you need to complete it to access part two)
 DOWNLOAD_INPUTS = True     # Set to false to not download inputs. Note that if the USER_SESSION_ID is wrong or left empty, inputs will not be downloaded.
 MAKE_CODE_TEMPLATE = True  # Set to false to not make code templates. Note that even if OVERWRITE is set to True, it will never overwrite codes.
@@ -17,8 +17,8 @@ OVERWRITE = False          # If you really need to download the whole thing agai
 # DATE SPECIFIC PARAMETERS
 date = "December 2021"              # Date automatically put in the code templates.
 starting_advent_of_code_year = 2015 # You can go as early as 2015.
-last_advent_of_code_year = 2021     # The setup will download all advent of code data up until that date included
-last_advent_of_code_day = 25        # If the year isn't finished, the setup will download days up until that day included for the last year
+last_advent_of_code_year = 2022     # The setup will download all advent of code data up until that date included
+last_advent_of_code_day = 5         # If the year isn't finished, the setup will download days up until that day included for the last year
 # Imports
 import os
 import datetime
