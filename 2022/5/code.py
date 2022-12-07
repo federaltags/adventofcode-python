@@ -12,7 +12,34 @@ with open((__file__.rstrip("code.py")+"input.txt"), 'r') as input_file:
 def part1():
     parts = input.split('\n\n')
 
-    stacks_lines = parts[0].splitlines();
+    stacks = parse_stack(parts[0])
+    instructions = parse_instructions(parts[1])
+
+    for instruction in instructions:
+        stacks = stacks.move(instruction[0], instruction[1], instruction[2])
+
+    return stacks.tops()
+
+def part2():
+    parts = input.split('\n\n')
+
+    stacks = parse_stack(parts[0])
+    instructions = parse_instructions(parts[1])
+
+    for instruction in instructions:
+        stacks = stacks.move_9001(instruction[0], instruction[1], instruction[2])
+
+    return stacks.tops()
+
+def parse_instructions(instructions_string):
+    instructions = []
+    for line in instructions_string.splitlines():
+        number, from_stack, to_stack = re.search(r"(\d+).*(\d).*(\d)", line).groups()
+        instructions.append((int(number), int(from_stack), int(to_stack)))
+    return instructions
+
+def parse_stack(stack_string):
+    stacks_lines = stack_string.splitlines();
     stacks_lines.reverse()
 
     all_stacks = {}
@@ -32,20 +59,7 @@ def part1():
             index += 1
 
     stacks = Stacks(all_stacks)
-
-    #print(stacks)
-    for line in parts[1].splitlines():
-        number, from_stack, to_stack = re.search(r"(\d+).*(\d).*(\d)", line).groups()
-        
-        #print(number, from_stack, to_stack)
-        stacks = stacks.move(int(number), int(from_stack), int(to_stack))
-
-        #print(stacks)
-
-    return stacks.tops()
+    return stacks
     
 print("Part One : "+ str(part1()))
-
-
-
-print("Part Two : "+ str(None))
+print("Part Two : "+ str(part2()))

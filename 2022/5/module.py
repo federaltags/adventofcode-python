@@ -14,5 +14,15 @@ class Stacks:
 
         return Stacks(new_stacks)
 
+    def move_9001(self, number, from_stack, to_stack):
+        new_stacks = self.stacks
+
+        to_move = new_stacks[from_stack][-number:]
+        new_stacks[from_stack] = new_stacks[from_stack][:-number]
+        new_stacks[to_stack] = new_stacks[to_stack] + to_move
+
+        return Stacks(new_stacks)
+
+
     def tops(self):
         return ''.join(list(stack[-1] for stack in self.stacks.values()))
