@@ -49,61 +49,63 @@ class Location:
         return f'({self.x}:{self.y})'
 
 @dataclass
-class State:
-    head_location: Location
-    tail_location: Location
+class Snake:
+    knots: list[Location]
     visited_by_tail: list[Location]
 
     def number_of_locations_tail_visited(self):
         return len({*self.visited_by_tail})
 
-    def __move_tail_if_needed__(self, new_head_location) -> Location:
-        offset = new_head_location.offset(self.tail_location)
+    @staticmethod
+    def __move_following_previous__(new_location_of_previous, current_knot) -> Location:
+        offset = new_location_of_previous.offset(current_knot)
 
         if (offset == (-2,0)):
-            return self.tail_location.move_with_offset(-1,0) #move left
+            return current_knot.move_with_offset(-1,0) #move left
         elif (offset == (2,0)):
-            return self.tail_location.move_with_offset(1,0) #move right
+            return current_knot.move_with_offset(1,0) #move right
         elif (offset == (0,-2)):
-            return self.tail_location.move_with_offset(0,-1) #move down
+            return current_knot.move_with_offset(0,-1) #move down
         elif (offset == (0,2)):
-            return self.tail_location.move_with_offset(0,1) #move up
+            return current_knot.move_with_offset(0,1) #move up
         # ..H
         # T..
         # .T.
         elif (offset in [(1,2),(2,1)]): 
-            return self.tail_location.move_with_offset(1,1) #move right up
+            return current_knot.move_with_offset(1,1) #move right up
         # H..
         # ..T
         # .T.
         elif (offset in [(-2,1),(-1,2)]):
-            return self.tail_location.move_with_offset(-1,1) #move left up
+            return current_knot.move_with_offset(-1,1) #move left up
         # .T.
         # T..
         # ..H
         elif (offset in [(2,-1),(1,-2)]):
-            return self.tail_location.move_with_offset(1,-1) #move right down
+            return current_knot.move_with_offset(1,-1) #move right down
         # .T.
         # ..T
         # H..
         elif (offset in [(-1,-2),(-2,-1)]):
-            return self.tail_location.move_with_offset(-1,-1) #move left down
+            return current_knot.move_with_offset(-1,-1) #move left down
 
-        return self.tail_location
+        # if (offset[0] >= 2 & offset[1] >= 2):
+        #     raise ValueError(new_location_of_previous, current_knot)
+
+        return current_knot
 
     def move(self, move):
-        new_head_location = self.head_location.move(move)
-        new_tail_location = self.__move_tail_if_needed__(new_head_location)        
+        new_knots = []
 
-        new_state = State(
-            head_location=new_head_location,
-            tail_location=new_tail_location,
-            visited_by_tail=self.visited_by_tail + [new_tail_location]
+        for knot in self.knots:
+            if len(new_knots) == 0:
+                new_knots.append(knot.move(move))
+            else:
+                new_knots.append(Snake.__move_following_previous__(new_knots[-1],knot))
+
+        new_state = Snake(
+            knots=new_knots,
+            visited_by_tail=self.visited_by_tail + [new_knots[-1]]
         )
 
-        print(f'after {move}: {new_state}')
-
         return new_state
-
-    def __str__(self) -> str:
-        return f'{self.head_location}:{self.tail_location}'
