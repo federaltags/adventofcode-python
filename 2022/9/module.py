@@ -71,22 +71,22 @@ class Snake:
         # ..H
         # T..
         # .T.
-        elif (offset in [(1,2),(2,1)]): 
+        elif (offset in [(2,2),(1,2),(2,1)]): 
             return current_knot.move_with_offset(1,1) #move right up
         # H..
         # ..T
         # .T.
-        elif (offset in [(-2,1),(-1,2)]):
+        elif (offset in [(-2,2),(-2,1),(-1,2)]):
             return current_knot.move_with_offset(-1,1) #move left up
         # .T.
         # T..
         # ..H
-        elif (offset in [(2,-1),(1,-2)]):
+        elif (offset in [(2,-2),(2,-1),(1,-2)]):
             return current_knot.move_with_offset(1,-1) #move right down
         # .T.
         # ..T
         # H..
-        elif (offset in [(-1,-2),(-2,-1)]):
+        elif (offset in [(-2,-2),(-1,-2),(-2,-1)]):
             return current_knot.move_with_offset(-1,-1) #move left down
 
         # if (offset[0] >= 2 & offset[1] >= 2):
