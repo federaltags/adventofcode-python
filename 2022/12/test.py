@@ -16,20 +16,20 @@ P2_2 = (2, 2)
 class Test(unittest.TestCase):
 
     def test_part1(self):
-        self.assertEqual(1, Grid({P0_0: 'a', P0_1: 'b'}).shortest_from_to(P0_0, P0_1))
-        self.assertEqual(2, Grid({P0_0: 'a', P0_1: 'b', P0_2: 'c'}).shortest_from_to(P0_0, P0_2))
+        self.assertEqual(1, Grid({P0_0: 'a', P0_1: 'b'}).shortest_from_to([P0_0], P0_1))
+        self.assertEqual(2, Grid({P0_0: 'a', P0_1: 'b', P0_2: 'c'}).shortest_from_to([P0_0], P0_2))
         self.assertEqual(
             8, Grid({
                 P2_0: 'g', P2_1: 'f', P2_2: 'e',
                 P1_0: 'h', P1_1: 'i', P1_2: 'd',
                 P0_0: 'a', P0_1: 'b', P0_2: 'c'
-            }).shortest_from_to(P0_0, P1_1))
+            }).shortest_from_to([P0_0], P1_1))
         self.assertEqual(
             4, Grid({
                 P2_0: 'c', P2_1: 'b', P2_2: 'c',
                 P1_0: 'b', P1_1: 'e', P1_2: 'd',
                 P0_0: 'a', P0_1: 'b', P0_2: 'c'
-            }).shortest_from_to(P0_0, P1_1))
+            }).shortest_from_to([P0_0], P1_1))
 
     def test_part2(self):
         pass

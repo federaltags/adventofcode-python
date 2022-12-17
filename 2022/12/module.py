@@ -6,8 +6,8 @@ from dataclasses import dataclass
 class Grid:
     squares: dict[tuple[int, int], chr]
 
-    def shortest_from_to(self, from_square: tuple[int, int], to_square: tuple[int, int]) -> int:
-        visited = deque([from_square])
+    def shortest_from_to(self, from_squares: list[tuple[int, int]], to_square: tuple[int, int]) -> int:
+        visited = deque(from_squares)
 
         steps = 0
         while (to_square not in visited):
