@@ -12,7 +12,6 @@ class Pair:
     content: list = field(default_factory=list)
     
     def is_in_order_with(self, other_pair) -> bool:
-        result = True
         for index, element in enumerate(self.content):
             other_element = Pair._other_element(other_pair.content, index)
             check_result = Pair._check_order(element, other_element)
@@ -25,6 +24,9 @@ class Pair:
                 continue
 
         return True
+
+    def __lt__(self, other):
+        return self.is_in_order_with(other)        
 
     @staticmethod
     def _check_order(element, other_element) -> CheckResult:

@@ -42,7 +42,7 @@ class Test(unittest.TestCase):
             .is_in_order_with(Pair([[[[], 6, 6, []]], [[[], [4, 7, 8, 4], 10, [8, 2, 3], 10], [[2], [10, 0], 6, 8, [2, 5, 3, 0]], 5, [[10, 5], [3, 4, 0], [0], [10, 0, 2, 4], 7]]])))
 
     def test_part2(self):
-        pass
+        self.assertEqual([Pair([]), Pair([[]])],sorted([Pair([[]]),Pair([])]))        
 
 
 if __name__ == '__main__':
