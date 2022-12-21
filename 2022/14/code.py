@@ -39,18 +39,23 @@ def points_in_line(from_point, to_point):
 
     return points
 
-
-def part1():
+def parse_cave():
     structure_points = set()
     for line in input.splitlines():
         structure_points.update(lines(line.split(" -> ")))
     
     cave = Cave(list(structure_points))
+    return cave
+
+def part1():
+    cave = parse_cave()
     cave.drop_from_until_falling_from_abyss()
     return cave.number_of_resting_grains_of_sands()
 
+def part2():
+    cave = parse_cave()
+    cave.drop_until_blocked()
+    return cave.number_of_resting_grains_of_sands()
+
 print("Part One : "+ str(part1()))
-
-
-
-print("Part Two : "+ str(None))
+print("Part Two : "+ str(part2()))

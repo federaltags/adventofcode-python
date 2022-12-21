@@ -19,6 +19,11 @@ class Test(unittest.TestCase):
         self.cave.drop_from_until_falling_from_abyss()
         self.assertEqual(24, self.cave.number_of_resting_grains_of_sands())
 
+    def test_part2(self): #25434
+        self.cave.drop_until_blocked()
+        self.assertEqual(93, self.cave.number_of_resting_grains_of_sands())
+        
+
 
 if __name__ == '__main__':
     unittest.main()
