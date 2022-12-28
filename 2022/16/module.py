@@ -1,78 +1,45 @@
 from dataclasses import dataclass, field
-from typing import Dict
+import functools
+from typing import Dict, Set
 
 
-@dataclass
+@dataclass(frozen=True)
 class Valve:
     name: str
     flow_rate: int
     tunnels_to: list[str] = field(default_factory=list)
-    
-@dataclass
-class Path:
-    valves_visited: list[str]
-    valves_opened: Dict[str,int] = field(default_factory=dict)
-    
-    def last_valve(self) -> str:
-        return self.valves_visited[-1]
-    
-    def is_not_opened(self, valve: Valve) -> bool:
-        return valve.name not in self.valves_opened.keys()
-    
-    def open_valve(self, valve: Valve, minutes: int):
-        return Path(self.valves_visited, (self.valves_opened | { valve.name : valve.flow_rate * minutes}))
-    
-    def tunnel_to(self, tunnels: list[str]):
-        paths = []
-        for tunnel in tunnels:
-            paths.append(Path(self.valves_visited + [tunnel], self.valves_opened))
-                
-        return paths
-    
-    def total(self):
-        return sum(pressure_released for pressure_released in self.valves_opened.values())
-                
-class Pathing:
-    
-    def __init__(self, valves: Dict[str,Valve]) -> None:
-        self.valves = valves
-        
-    def _new_paths(self, path: Path, current_valve: Valve, minutes_left):        
-        new_paths = []
-        if (current_valve.flow_rate != 0) & (path.is_not_opened(current_valve)):
-            new_paths.append(path.open_valve(current_valve, minutes_left - 1))
-            
-        new_paths += path.tunnel_to(current_valve.tunnels_to)
-        
-        if (not new_paths):
-            return [path]
-        
-        return new_paths
-    
-    def _remove_bad_paths(self, paths: list[Path]):
-        if len(paths) < 100:
-            return paths
-        
-        best_sorted_by_pressure_released = sorted(paths, key = lambda t: t.total(), reverse = True)
-        half_length = len(best_sorted_by_pressure_released) // 2
-        first_half = best_sorted_by_pressure_released[:half_length]
-        
-        return first_half
-    
-    def max_release_pressured(self):
-        minutes_left = 30
-        
-        paths = [Path(['AA'])]        
-        while(minutes_left > 0):
-            new_paths = []
-            for path in paths:
-                new_paths += self._new_paths(path, self.valves[path.last_valve()], minutes_left)
-            
-            paths = self._remove_bad_paths(new_paths)
-            
-            # for path in paths:
-            #     print(path)
 
-            minutes_left -= 1
-                        
-        return max(path.total() for path in paths)
+
+class Pathing:
+
+    @staticmethod
+    def max_pressure_released(minutes: int, valves: Dict[str, Valve], elephant: bool = False):
+
+        @functools.cache
+        def calculate_max_pressure_released(opened: Set[str], mins_remaining: int, curr_valve_id: str, elephant: bool = False):
+            if mins_remaining <= 0:
+                if elephant:
+                    return calculate_max_pressure_released(opened, 26, "AA")
+                else:
+                    return 0
+
+            most_pressure_released = 0
+            current_valve = valves[curr_valve_id]
+            for tunnel in current_valve.tunnels_to:
+                most_pressure_released = max(most_pressure_released, calculate_max_pressure_released(
+                    opened, mins_remaining - 1, tunnel, elephant))
+
+            if curr_valve_id not in opened and current_valve.flow_rate > 0 and mins_remaining > 0:
+                opened = set(opened)
+                opened.add(curr_valve_id)
+                mins_remaining -= 1
+                total_released = mins_remaining * current_valve.flow_rate
+
+                for tunnel in current_valve.tunnels_to:
+                    # Try each neighbour and recurse in. Save the best one.
+                    most_pressure_released = max(most_pressure_released,
+                                                 total_released + calculate_max_pressure_released(frozenset(opened), mins_remaining - 1, tunnel, elephant))
+
+            return most_pressure_released
+
+        return calculate_max_pressure_released(frozenset(), minutes, 'AA', elephant)
