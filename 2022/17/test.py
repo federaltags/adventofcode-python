@@ -6,20 +6,23 @@ from module import Grid, Move
 class Test(unittest.TestCase):
 
     def test_part1(self):
-        self.assertListEqual([0, 0, 0, 0, 0, 0, 0], Grid.get_top_row_after_drops(0))
-        
+        self.assertListEqual([0, 0, 0, 0, 0, 0, 0],
+                             Grid.get_top_row_after_drops(0))
+
         # |.......|
         # |.......|
         # |.......|
         # |..1111.|
         # +-------+
-        self.assertListEqual([0, 0, 1, 1, 1, 1, 0], Grid.get_top_row_after_drops(1))
+        self.assertListEqual([0, 0, 1, 1, 1, 1, 0],
+                             Grid.get_top_row_after_drops(1))
         # |...2...|
         # |..222..|
         # |...2...|
         # |..1111.|
         # +-------+
-        self.assertListEqual([0, 0, 3, 4, 3, 1, 0], Grid.get_top_row_after_drops(2))
+        self.assertListEqual([0, 0, 3, 4, 3, 1, 0],
+                             Grid.get_top_row_after_drops(2))
         # |....3..|
         # |....3..|
         # |..333..|
@@ -28,7 +31,8 @@ class Test(unittest.TestCase):
         # |...2...|
         # |..1111.|
         # +-------+
-        self.assertListEqual([0, 0, 5, 5, 7, 1, 0], Grid.get_top_row_after_drops(3))
+        self.assertListEqual([0, 0, 5, 5, 7, 1, 0],
+                             Grid.get_top_row_after_drops(3))
         # |..4....|
         # |..4....|
         # |..4.3..|
@@ -39,7 +43,8 @@ class Test(unittest.TestCase):
         # |...2...|
         # |..1111.|
         # +-------+
-        self.assertListEqual([0, 0, 9, 5, 7, 1, 0], Grid.get_top_row_after_drops(4))
+        self.assertListEqual([0, 0, 9, 5, 7, 1, 0],
+                             Grid.get_top_row_after_drops(4))
         # |..55...|
         # |..55...|
         # |..4....|
@@ -52,7 +57,8 @@ class Test(unittest.TestCase):
         # |...2...|
         # |..1111.|
         # +-------+
-        self.assertListEqual([0, 0, 11, 11, 7, 1, 0], Grid.get_top_row_after_drops(5))
+        self.assertListEqual([0, 0, 11, 11, 7, 1, 0],
+                             Grid.get_top_row_after_drops(5))
         # |..6666.|
         # |..55...|
         # |..55...|
@@ -66,15 +72,28 @@ class Test(unittest.TestCase):
         # |...2...|
         # |..1111.|
         # +-------+
-        self.assertListEqual([0, 0, 12, 12, 12, 12, 0], Grid.get_top_row_after_drops(6))
-        
+        self.assertListEqual([0, 0, 12, 12, 12, 12, 0],
+                             Grid.get_top_row_after_drops(6))
+
         # |.......|
         # |.......|
         # |.......|
         # |1111...|
         # +-------+
-        # self.assertListEqual([1, 1, 1, 1, 0, 0, 0], Grid.get_top_row_after_drops(1, [Move.LEFT]))
-        
+        self.assertListEqual([1, 1, 1, 1, 0, 0, 0],
+                             Grid.get_top_row_after_drops(1, [Move.LEFT]))
+
+        # |.......|
+        # |.......|
+        # |.......|
+        # |...1111|
+        # +-------+
+        self.assertListEqual([0, 0, 0, 1, 1, 1, 1],
+                             Grid.get_top_row_after_drops(1, [Move.RIGHT]))
+
+        self.assertListEqual([0, 0, 1, 1, 1, 1, 0], Grid.get_top_row_after_drops(
+            1, [Move.RIGHT, Move.RIGHT, Move.RIGHT, Move.LEFT]))
+
 
 if __name__ == '__main__':
     unittest.main()
