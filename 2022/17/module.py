@@ -1,4 +1,10 @@
 from dataclasses import dataclass
+from enum import Enum
+
+
+class Move(Enum):
+    LEFT = '<'
+    RIGHT = '>'
 
 
 @dataclass(frozen=True)
@@ -32,8 +38,9 @@ class Rock:
             if highest_point is None:
                 highest_point = point if point.x == x else None
             else:
-                highest_point = point if ((point.x == x) & (point.y > highest_point.y)) else highest_point
-            
+                highest_point = point if ((point.x == x) & (
+                    point.y > highest_point.y)) else highest_point
+
         return highest_point
 
 
@@ -58,11 +65,13 @@ rocks = {
     4: Rock([Point(0, 0), Point(0, 1), Point(1, 0), Point(1, 1)]),
 }
 
+
 class Grid:
 
     @ staticmethod
     def _place_in_grid(rock: Rock, top_line_points: list[Point]) -> Rock:
-        start_location = Point(2, max(point.y for point in top_line_points) + 3)
+        start_location = Point(
+            2, max(point.y for point in top_line_points) + 3)
 
         return rock.place_at(start_location)
 
@@ -71,26 +80,49 @@ class Grid:
         new_top_line_points = []
 
         for top_line_point in top_line_points:
-            point_in_rock = rock.highest_point_for_x(top_line_point.x)            
-            new_top_line_points.append(top_line_point if point_in_rock is None else point_in_rock)
+            point_in_rock = rock.highest_point_for_x(top_line_point.x)
+            new_top_line_points.append(
+                top_line_point if point_in_rock is None else point_in_rock)
 
         return new_top_line_points
 
     @ staticmethod
-    def get_top_row_after_drops(drops: int) -> list[int]:
-        top_line_points: list[Point] = [Point(x, 0) for x in range(0,7)]
+    def _move_left(rock: Rock):
+        pass
+
+    @staticmethod
+    def _highest_points(occupied_points):
+        highest_points = []
+        for x in range(0,7):
+            highest_points.append(max(occupied_point.y for occupied_point in occupied_points if occupied_point.x == x))
+
+        return highest_points
+        
+    @ staticmethod
+    def get_top_row_after_drops(drops: int, moves: list[Move] = []) -> list[int]:
+        occupied_points: set[Point] = [Point(x, 0) for x in range(0, 7)]
 
         for rock_number in range(drops):
-            rock = Grid._place_in_grid(rocks[rock_number % 5], top_line_points)
+            rock = Grid._place_in_grid(rocks[rock_number % 5], occupied_points)
 
+            if moves:
+                next_move = moves.pop()
+
+                if next_move == Move.LEFT:
+                    rock = Grid._move_left(rock)
+                    pass
+
+                moves.append(next_move)
+
+            # drop
             can_drop = True
             while (can_drop):
                 dropped_rock = rock.drop()
 
-                if dropped_rock.conflicts_with(top_line_points):
-                    top_line_points = Grid._new_top_line_points(rock, top_line_points)
+                if dropped_rock.conflicts_with(occupied_points):
+                    occupied_points += rock.points
                     can_drop = False
                 else:
                     rock = dropped_rock
 
-        return [point.y for point in top_line_points]
+        return Grid._highest_points(occupied_points)
